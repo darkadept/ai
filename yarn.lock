@@ -2669,7 +2669,7 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
-fbjs@^0.8.16:
+fbjs@^0.8.16, fbjs@^0.8.17:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   dependencies:
@@ -4143,6 +4143,10 @@ klaw@^1.0.0:
   optionalDependencies:
     graceful-fs "^4.1.9"
 
+konva@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-2.1.7.tgz#f32c46373b125f6356c26d1cc6e7c22e2c4c82b3"
+
 latest-version@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/latest-version/-/latest-version-3.1.0.tgz#a205383fea322b33b5ae3b18abee0dc2f356ee15"
@@ -5541,10 +5545,6 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-canvas-draw@^0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/react-canvas-draw/-/react-canvas-draw-0.1.9.tgz#88ddf32fb6969ce6e33df0b7cd56b1d6a3aae36f"
-
 react-dev-utils@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-5.0.1.tgz#1f396e161fe44b595db1b186a40067289bf06613"
@@ -5580,6 +5580,22 @@ react-dom@^16.4.1:
 react-error-overlay@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
+
+react-konva@^1.7.9:
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-1.7.9.tgz#aeefaed66a10babcd5a73fdd0e7aab73ba6dd7da"
+  dependencies:
+    fbjs "^0.8.17"
+    react-reconciler "^0.12.0"
+
+react-reconciler@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.12.0.tgz#dd3ecd98f64a2d8449298dadab041910cafd2849"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 react-router@^4.3.1:
   version "4.3.1"
