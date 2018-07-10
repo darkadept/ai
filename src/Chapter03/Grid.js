@@ -6,23 +6,24 @@ export default class Grid extends Component {
 	drawMap() {
 		const {layer} = this.refs;
 		const {map, width, height, pixelSize} = this.props;
+		const rendered = map.renderMap;
 
 		for(let x=0; x<width; x++) {
 			for(let y=0; y<height; y++) {
-				if (map[x][y]) {
+				if (rendered[x][y]) {
 					layer.add(new Rect({
 						x: (x * pixelSize) + 1,
 						y: (y * pixelSize) + 1,
 						width: pixelSize - 2,
 						height: pixelSize - 2,
-						...map[x][y],
+						...rendered[x][y],
 					}));
 				}
 			}
 		}
 	}
 
-	componentDidMount() {
+	redraw() {
 		const {layer} = this.refs;
 		const {
 			width,
@@ -32,7 +33,9 @@ export default class Grid extends Component {
 		const pixelWidth = width * pixelSize;
 		const pixelHeight = height * pixelSize;
 
+		console.log('redrawing');
 
+		// Grid pen definition
 		const gridPen = {
 			stroke: 'grey',
 			strokeWidth: 0.7,
@@ -46,7 +49,7 @@ export default class Grid extends Component {
 		}));
 
 		// Draw X grid
-		for (let x=0; x<pixelWidth; x+=pixelSize) {
+		for (let x = 0; x <= pixelWidth; x += pixelSize) {
 			layer.add(new Line({
 				points: [x, 0, x, pixelWidth],
 				...gridPen,
@@ -54,30 +57,39 @@ export default class Grid extends Component {
 		}
 
 		// Draw Y grid
-		for (let y = 0; y < pixelWidth; y += pixelSize) {
+		for (let y = 0; y <= pixelWidth; y += pixelSize) {
 			layer.add(new Line({
 				points: [0, y, pixelWidth, y],
 				...gridPen,
 			}));
 		}
 
-		layer.add(new Line({
-			points: [
-				0, pixelHeight, pixelWidth, pixelHeight,
-				pixelWidth, 0, pixelWidth, pixelHeight,
-			],
-			...gridPen,
-		}));
-
+		// Draw the map
 		this.drawMap();
 	}
 
+	shouldComponentUpdate(nProps) {
+		const {width, height, map} = this.props;
+		const doUpdate = nProps.width === width && nProps.height === height && nProps.map.hash === map.hash;
+		return !doUpdate;
+	}
+
+	componentDidMount() {
+		this.redraw();
+	}
+
+	componentDidUpdate() {
+		const {layer} = this.refs;
+		layer.clear().destroyChildren();
+		this.redraw();
+	}
+
 	render() {
-		const {width=40, height=20, pixelSize=30, x=50, y=50} = this.props;
+		const {width=40, height=20, pixelSize=30, x=0, y=0} = this.props;
 
 		return (
 			<Stage x={x} y={y} width={(width * pixelSize)+x+1} height={(height * pixelSize)+y+1}>
-				<Layer ref="layer"/>
+				<Layer ref="layer" hash={this.props.map.hash}/>
 			</Stage>
 		);
 	}
