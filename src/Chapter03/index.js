@@ -114,14 +114,20 @@ export default class Chapter03 extends Component {
 	 * Run loop
 	 */
 	loop() {
-		if (this.state.running) {
-			this.state.bob.epoch();
-			if (!this.state.bob.running) {
+		const {running, bob, options} = this.state;
+
+		if (running) {
+			bob.epoch();
+
+			console.log(bob.genomes[bob.fittestGenome]);
+
+
+			if (!bob.running) {
 				this.setState({running: false});
 			} else {
 				setTimeout(() => {
 					this.loop();
-				}, this.state.options.speed);
+				}, options.speed);
 			}
 		}
 	}

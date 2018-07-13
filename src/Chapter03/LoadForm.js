@@ -6,7 +6,7 @@ export default function LoadForm({values, handleChange, handleSubmit}) {
 		<Form onSubmit={handleSubmit}>
 			<Form.Field>
 				<label>Save</label>
-				<Form.TextArea autoHeight name="text" onChange={handleChange} value={values.text}/>
+				<Form.TextArea name="text" onChange={handleChange} value={values.text}/>
 			</Form.Field>
 			<Form.Button>Load</Form.Button>
 		</Form>

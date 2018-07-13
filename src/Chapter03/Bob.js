@@ -52,29 +52,44 @@ export default class Bob {
 		return this.genomes[selectedGenome];
 	}
 
-	mutate(vecBits) {
-		for (let curBit=0; curBit<vecBits.length; curBit++) {
-			if (randomFloat() < this._mutationRate) {
-				// modify vecBits
+	mutate(genome) {
+		const {mutationRate} = this._options;
+		for (let curBit=0; curBit<genome.length; curBit++) {
+			if (randomFloat() < mutationRate) {
+				genome.flip(curBit);
 			}
 		}
+		return genome;
 	}
 
 	crossover(mum, dad) {
-		if (randomFloat() > this._crossoverRate || mum.equals(dad)) {
+		const {crossoverRate, chromoLength} = this._options;
+
+		// If crossover rate isn't reached or parents are the same just return them as offspring
+		if (randomFloat() > crossoverRate || mum === dad) {
 			return {
 				baby1: mum,
 				baby2: dad,
 			}
 		}
 
-		const cp = random(0, this._chromoLength - 1);
+		let baby1 = new Genome(0);
+		let baby2 = new Genome(0);
 
-		// for (let i=0; i<cp; i++) {
-		// 	baby1.
-		// }
+		// Determine crossover point
+		const cp = random(0, chromoLength - 1);
 
+		// Swap bits
+		for (let i=0; i<cp; i++) {
+			baby1.push(mum[i]);
+			baby2.push(dad[i]);
+		}
+		for (let i=cp; i<chromoLength; i++) {
+			baby1.push(dad[i]);
+			baby2.push(mum[i]);
+		}
 
+		return {baby1, baby2};
 	}
 
 	createStartPopulation() {
@@ -107,19 +122,19 @@ export default class Bob {
 			const mum = this.rouletteWheelSelection();
 			const dad = this.rouletteWheelSelection();
 
-		// 	let {baby1, baby2} = this.crossover(mum, dad);
+			let {baby1, baby2} = this.crossover(mum, dad);
 
-		// 	baby1 = this.mutate(baby1);
-		// 	baby2 = this.mutate(baby2);
+		 	baby1 = this.mutate(baby1);
+		 	baby2 = this.mutate(baby2);
 
-		// 	babyGenomes.push(baby1);
-		// 	babyGenomes.push(baby2);
+			babyGenomes.push(baby1);
+			babyGenomes.push(baby2);
 
 			newBabies += 2;
 		}
-		//
-		// this._genomes = babyGenomes;
-		// this._generation += 1;
+
+		this.genomes = babyGenomes;
+		this.generation += 1;
 	}
 
 	updateFitnessScores() {
