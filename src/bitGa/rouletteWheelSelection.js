@@ -3,10 +3,10 @@ import {randomFloat} from '../lib';
 /**
  * Uses roulette wheel selection to select a genome from a population.
  * @param {number} totalFitnessScore - The current total fitness score.
- * @param {BitGenome[]} genomes - Array of bit genomes.
- * @return {BitGenome} The selected genome.
+ * @param {Genome[]} genomes - Array of bit genomes.
+ * @return {Genome} The selected genome.
  */
-export default function bitRouletteWheelSelection({
+export default function rouletteWheelSelection({
 	totalFitnessScore,
 	genomes,
 }) {

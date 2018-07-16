@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import Chapter03 from './Chapter03';
+import MazeContainer from './gfx/MazeContainer';
 
 export default class App extends Component {
 	render() {
 		return (
-			<Chapter03/>
+			<MazeContainer/>
 		);
 	}
 }

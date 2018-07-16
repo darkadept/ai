@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should clone & push bits 1`] = `
+Genome {
+  "_bits": Array [
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+  ],
+  "_fitness": 0,
+}
+`;
+
+exports[`should clone & push bits 2`] = `
+Genome {
+  "_bits": Array [
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    1,
+  ],
+  "_fitness": 0,
+}
+`;
+
+exports[`should construct as a clone 1`] = `
+Array [
+  0,
+  1,
+  0,
+  1,
+  0,
+  1,
+  0,
+  1,
+  0,
+  1,
+]
+`;
+
+exports[`should construct random 1`] = `
+Array [
+  0,
+  1,
+  0,
+  1,
+  0,
+  1,
+  0,
+  1,
+  0,
+  1,
+]
+`;
+
+exports[`should flip bits 1`] = `
+Genome {
+  "_bits": Array [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+  ],
+  "_fitness": 0,
+}
+`;

@@ -4,7 +4,7 @@ import {random} from '../lib';
 /**
  * Genome that is represent by binary bits
  */
-export default class BitGenome {
+export default class Genome {
 	/**
 	 * Construct a new binary bit genome.
 	 * @param {number} numBits - Will randomly initialize this many bits in the genome (0 or 1). Default 0.
@@ -12,8 +12,8 @@ export default class BitGenome {
 	 * @param {number[]} bits - Initialize bit array with predefined bit array. Bits are copied. Default [].
 	 */
 	constructor({fitness, bits, numBits} = {fitness: 0, bits: [], numBits: 0}) {
-		this._bits = bits.slice(0);
-		this._fitness = fitness;
+		this._bits = bits ? bits.slice(0) : [];
+		this._fitness = fitness ? fitness : 0;
 
 		// Initialize with random bits
 		for (let i = 0; i < numBits; i++) {
@@ -22,7 +22,7 @@ export default class BitGenome {
 	}
 
 	get fitness() {
-		return this._fitness
+		return this._fitness;
 	};
 
 	set fitness(value) {
@@ -30,7 +30,7 @@ export default class BitGenome {
 	}
 
 	get length() {
-		return this._bits.length
+		return this._bits.length;
 	};
 
 	get bits() {
@@ -50,7 +50,7 @@ export default class BitGenome {
 	/**
 	 * Add a bit to the end of the genome.
 	 * @param {number} bit - Bit (0 or 1) to add
-	 * @return {BitGenome} - Returns the genome
+	 * @return {Genome} - Returns the genome
 	 */
 	push(bit) {
 		this._bits.push(bit);
@@ -60,10 +60,21 @@ export default class BitGenome {
 	/**
 	 * Flip a specific bit in the genome.
 	 * @param {number} index - Index of bit to flip.
-	 * @return {BitGenome} - Returns the genome.
+	 * @return {Genome} - Returns the genome.
 	 */
 	flip(index) {
 		this._bits[index] = this._bits[index] ? 0 : 1;
 		return this;
+	}
+
+	/**
+	 * Clone genome
+	 * @returns {Genome}
+	 */
+	clone() {
+		return new Genome({
+			fitness: this._fitness,
+			bits: this._bits.slice(0),
+		});
 	}
 }
