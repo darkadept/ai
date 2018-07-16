@@ -62,3 +62,12 @@ it('should flip bits', () => {
 	g.flip(8);
 	expect(g).toMatchSnapshot();
 });
+
+it('should slice', () => {
+	const a = new Genome({numBits: 8});
+	const b = a.slice(0, 4);
+	const c = a.slice(4, 4);
+
+	expect(b).toMatchSnapshot();
+	expect(c).toMatchSnapshot();
+});

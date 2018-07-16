@@ -19,7 +19,7 @@ export default class Grid extends Component {
 		const {path} = this.props;
 
 		path.forEach(({x, y}) => {
-			this.drawBlock(x, y, 'purple');
+			this.drawBlock(x, y, 'white');
 		});
 	}
 
@@ -47,8 +47,6 @@ export default class Grid extends Component {
 		} = this.props;
 		const pixelWidth = width * pixelSize;
 		const pixelHeight = height * pixelSize;
-
-		console.log('redrawing');
 
 		// Grid pen definition
 		const gridPen = {
@@ -85,8 +83,8 @@ export default class Grid extends Component {
 	}
 
 	shouldComponentUpdate(nProps) {
-		const {width, height, map} = this.props;
-		const doUpdate = nProps.width === width && nProps.height === height && nProps.map === map;
+		const {width, height, map, path} = this.props;
+		const doUpdate = nProps.width === width && nProps.height === height && nProps.map === map && nProps.path === path;
 		return !doUpdate;
 	}
 
@@ -96,16 +94,16 @@ export default class Grid extends Component {
 
 	componentDidUpdate() {
 		const {layer} = this.refs;
-		layer.clear().destroyChildren();
+		layer.destroyChildren();
 		this.redraw();
 	}
 
 	render() {
-		const {width=40, height=20, pixelSize=30, x=0, y=0, map} = this.props;
+		const {width=40, height=20, pixelSize=30, x=0, y=0, map, path} = this.props;
 
 		return (
 			<Stage x={x} y={y} width={(width * pixelSize)+x+1} height={(height * pixelSize)+y+1}>
-				<Layer ref="layer" hash={map.id}/>
+				<Layer ref="layer" hash={{a: map.id, b: path}}/>
 			</Stage>
 		);
 	}

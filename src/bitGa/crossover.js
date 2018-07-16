@@ -16,20 +16,18 @@ export default function crossover({mum, dad, crossoverRate}) {
 		};
 	}
 
-	let baby1 = new Genome();
-	let baby2 = new Genome();
-
 	const cp = random(0, mum.length - 1);
 
-	// Swap bits
-		for (let i=0; i<cp; i++) {
-			baby1.push(mum[i]);
-			baby2.push(dad[i]);
-		}
-		for (let i=cp; i<mum.length; i++) {
-			baby1.push(dad[i]);
-			baby2.push(mum[i]);
-		}
+	let baby1 = new Genome({bits: [
+			...mum.slice(0, cp),
+			...dad.slice(cp, dad.length - cp),
+	]});
+	let baby2 = new Genome({
+		bits: [
+			...dad.slice(0, cp),
+			...mum.slice(cp, mum.length - cp),
+		]
+	});
 
-		return {baby1, baby2};
+	return {baby1, baby2};
 }

@@ -1,10 +1,15 @@
 import React from 'react';
-import {Container, Header, Button, Segment} from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import {Container, Header, Button, Segment, Statistic} from 'semantic-ui-react';
 import Grid from './Grid';
 import Map from '../bitGa/Map';
 import Robot from '../bitGa/Robot';
 
 export default class MazeContainer extends React.Component {
+	static contextTypes = {
+		loop: PropTypes.object,
+	};
+
 	constructor(props) {
 		super(props);
 
@@ -12,18 +17,16 @@ export default class MazeContainer extends React.Component {
 		const algOptions = {
 			crossoverRate: 0.7,
 			mutationRate: 0.001,
-			populationSize: 140,
-			chromoLength: 70,
+			populationSize: 240,
+			chromoLength: 376, // 70
 		};
 		const sysOptions = {
 			pixelSize: 10,
-			speed: 1000,
+			speed: 250,
 		};
 
-		const map = new Map(mapOptions).generate();
+		const map = new Map(mapOptions).generate(70);
 		const robot = new Robot({map, options: algOptions});
-
-		console.log(robot);
 
 		this.state = {
 			map,
@@ -33,33 +36,61 @@ export default class MazeContainer extends React.Component {
 			algOptions,
 			sysOptions,
 			bestPath: [],
+			generation: 0,
+			bestFitnessScore: 0,
 		};
+
+		this._prevTicks = window.performance.now();
 	}
 
-	loop = () => {
-		const {running, robot, sysOptions} = this.state;
-		if (running) {
+	update = () => {
+		const {running, robot} = this.state;
+		if (running && !robot.complete) {
 			robot.epoch();
-			this.setState({bestPath: robot.path(robot.bestDirections())});
-
 			if (robot.complete) {
-				this.setState({running: false});
-			} else {
-				setTimeout(() => this.loop(), sysOptions.speed);
+				this.setState({
+					running: false,
+					bestPath: robot.path(robot.bestDirections()),
+					bestFitnessScore: robot._ga.bestFitnessScore,
+					generation: robot._ga.generation,
+				});
 			}
 		}
+
+		let curTicks = window.performance.now();
+		if (curTicks - this._prevTicks >= this.state.sysOptions.speed) {
+			this._prevTicks = curTicks;
+
+			if (running) {
+				this.setState({
+					bestPath: robot.path(robot.bestDirections()),
+					bestFitnessScore: robot._ga.bestFitnessScore,
+					generation: robot._ga.generation,
+				});
+			}
+		}
+		this._prevTicks = this._prevTicks + 1;
 	};
 
 	handleRunningToggle = () => {
+		if (!this.state.running) {
+			this.state.robot.reset();
+		}
 		this.setState(state => ({
 			running: !state.running,
-		}), () => {
-			if (this.state.running) this.loop();
-		});
+		}));
 	};
 
+	componentDidMount() {
+		this.context.loop.subscribe(this.update);
+	}
+
+	componentWillUnmount() {
+		this.context.loop.unsubscribe(this.update);
+	}
+
 	render() {
-		const {running, map, mapOptions, sysOptions, bestPath} = this.state;
+		const {running, map, mapOptions, sysOptions, bestPath, generation, bestFitnessScore} = this.state;
 
 		return (
 			<Container text style={{marginTop: '2rem'}}>
@@ -74,7 +105,18 @@ export default class MazeContainer extends React.Component {
 					>
 					</Grid>
 				</Segment>
-				<Button color={running ? 'red' : 'green'} onClick={this.handleRunningToggle}>{running ? 'Stop' : 'Start'}</Button>
+				<Button color={running ? 'red' : 'green'}
+				        onClick={this.handleRunningToggle}>{running ? 'Stop' : 'Start'}</Button>
+				<Statistic.Group>
+					<Statistic>
+						<Statistic.Value>{generation}</Statistic.Value>
+						<Statistic.Label>Generation</Statistic.Label>
+					</Statistic>
+					<Statistic>
+						<Statistic.Value>{Math.round(bestFitnessScore*1000)/1000}</Statistic.Value>
+						<Statistic.Label>Best Fitness</Statistic.Label>
+					</Statistic>
+				</Statistic.Group>
 			</Container>
 		);
 	}

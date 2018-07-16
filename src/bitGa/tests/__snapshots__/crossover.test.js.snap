@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should cross over bits 1`] = `
+Array [
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  1,
+  1,
+]
+`;
+
+exports[`should cross over bits 2`] = `
+Array [
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0,
+  0,
+]
+`;
+
+exports[`should cross over bits 3`] = `
+Object {
+  "baby1": Genome {
+    "_bits": Array [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+    "_fitness": 0,
+  },
+  "baby2": Genome {
+    "_bits": Array [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+    ],
+    "_fitness": 0,
+  },
+}
+`;

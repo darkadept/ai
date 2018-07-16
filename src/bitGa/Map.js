@@ -21,6 +21,8 @@ export default class Map {
 	get start() {return this._start;}
 	get end() {return this._end;}
 	get id() {return this._id;}
+	get width() {return this._width;}
+	get height() {return this._height;}
 
 	at(x, y) {
 		// Check bounds

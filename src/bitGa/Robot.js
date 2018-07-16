@@ -1,5 +1,5 @@
 import debug from 'debug';
-import {bits2int} from "../lib";
+import {bits2int, create2dArray} from "../lib";
 import GA from "./GA";
 
 const d = debug('app.Robot');
@@ -22,6 +22,10 @@ export default class Robot {
 
 	get complete() {return this._ga.complete;}
 
+	reset() {
+		this._ga.createStartPopulation();
+	}
+
 	bestDirections() {
 		return this.decodeGenome(this._ga.fittestGenome);
 	}
@@ -29,7 +33,8 @@ export default class Robot {
 	epoch() {
 		this._ga.epoch();
 		d(`epoch: ${this._ga.generation} ${this._ga.bestFitnessScore}`);
-		d(`  bits: ${this._ga.fittestGenome.bits}`);
+		// d(`  bits: ${this._ga.fittestGenome.bits}`);
+		d(this.bestDirections());
 	}
 
 	decodeGenome = genome => {
@@ -68,20 +73,36 @@ export default class Robot {
 
 	walk = directions => {
 		const {start, end} = this._map;
+		const memory = create2dArray(this._map.width, this._map.height);
 
 		let pos = {x: start.x, y: start.y};
+		let foundFinish = false;
+		let numCrossovers = 0;
 
 		directions.forEach(vec => {
-			pos = this.move(vec, pos);
-			// TODO Check if we already found the exit here.
+			if (!foundFinish) {
+				pos = this.move(vec, pos);
+
+				// if (memory[pos.x][pos.y]) numCrossovers++;
+				// memory[pos.x][pos.y] = 1;
+
+				if (pos.x === this._map.end.x && pos.y === this._map.end.y) {
+					foundFinish = true;
+				}
+			}
 		});
+
+		if (foundFinish) return 1;
 
 		// Calculate fitness score (0 to 1)
 		const diff = {
 			x: Math.abs(pos.x - end.x),
 			y: Math.abs(pos.y - end.y),
 		};
-		return 1 / (diff.x + diff.y + 1);
+
+		// console.log(diff.x, diff.y, (diff.x + diff.y + 1), 1/(diff.x+diff.y+1), numCrossovers);
+
+		return 1 / (diff.x + diff.y + numCrossovers + 1);
 	};
 
 	path = directions => {
@@ -90,7 +111,9 @@ export default class Robot {
 		let path = [];
 		directions.forEach(vec => {
 			pos = this.move(vec, pos);
-			path.push(pos);
+			if (pos.x !== this._map.end.x && pos.y !== this._map.end.y) {
+				path.push(pos);
+			}
 		});
 		return path;
 	};

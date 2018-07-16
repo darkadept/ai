@@ -84,3 +84,21 @@ Genome {
   "_fitness": 0,
 }
 `;
+
+exports[`should slice 1`] = `
+Array [
+  0,
+  1,
+  0,
+  1,
+]
+`;
+
+exports[`should slice 2`] = `
+Array [
+  0,
+  1,
+  0,
+  1,
+]
+`;
